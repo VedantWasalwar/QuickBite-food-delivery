@@ -16,6 +16,42 @@ from .serializers import (
 )
 
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def api_root(request):
+    """
+    Root API endpoint - shows API is working and lists available endpoints.
+    GET /api/
+    """
+    return Response({
+        'message': 'QuickBite Food Delivery API is running!',
+        'status': 'success',
+        'endpoints': {
+            'health': '/api/health/',
+            'register': '/api/register/',
+            'login': '/api/login/',
+            'foods': '/api/foods/',
+            'cart': '/api/cart/',
+            'cart_add': '/api/cart/add/',
+            'order_create': '/api/order/create/',
+        },
+        'version': '1.0.0'
+    })
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def health_check(request):
+    """
+    Health check endpoint for monitoring.
+    GET /api/health/
+    """
+    return Response({
+        'status': 'healthy',
+        'message': 'API is operational'
+    })
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
@@ -220,6 +256,8 @@ def create_order(request):
     # Return order details
     serializer = OrderSerializer(order)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 
 
 

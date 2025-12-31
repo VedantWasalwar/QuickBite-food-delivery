@@ -123,7 +123,19 @@ REST_FRAMEWORK = {
 }
 
 # CORS (Frontend connect)
-CORS_ALLOW_ALL_ORIGINS = True
+# Allow specific frontend origins for better security
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://quickbite-food-delivery-1.onrender.com",
+]
+
+# Also allow all origins in development (for local network access)
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOW_ALL_ORIGINS = False
+
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_HEADERS = [

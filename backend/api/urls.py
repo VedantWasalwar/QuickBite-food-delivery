@@ -6,6 +6,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Root API endpoint - shows API is working
+    path('', views.api_root, name='api_root'),
+    
+    # Health check endpoint
+    path('health/', views.health_check, name='health_check'),
+    
     # User authentication
     path('register/', views.register_user, name='register'),
     path('login/', views.login_user, name='login'),
@@ -21,6 +27,8 @@ urlpatterns = [
     # Orders
     path('order/create/', views.create_order, name='create_order'),
 ]
+
+
 
 
 
