@@ -116,9 +116,29 @@ def food_list(request):
     GET /api/foods/
     No authentication required (anyone can see the menu).
     """
-    foods = FoodItem.objects.all()
-    serializer = FoodItemSerializer(foods, many=True)
-    return Response(serializer.data)
+    try:
+        foods = FoodItem.objects.all()
+        serializer = FoodItemSerializer(foods, many=True)
+        
+        # Update image URLs to include full path
+        data = serializer.data
+        for item in data:
+            if item.get('image'):
+                # If image path is relative, make it absolute
+                if item['image'] and not item['image'].startswith('http'):
+                    request_scheme = 'https' if request.is_secure() else 'http'
+                    item['image'] = f"{request_scheme}://{request.get_host()}{item['image']}"
+        
+        return Response(data)
+    except Exception as e:
+        # Log error for debugging
+        import traceback
+        print(f"Error in food_list: {str(e)}")
+        print(traceback.format_exc())
+        return Response(
+            {'error': 'Failed to retrieve food items', 'detail': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 @api_view(['GET'])

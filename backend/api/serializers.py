@@ -33,11 +33,20 @@ class FoodItemSerializer(serializers.ModelSerializer):
     Serializer for FoodItem model.
     Returns food item data with image URL.
     """
-    image = serializers.ImageField(required=False)  # Image is optional
+    image = serializers.SerializerMethodField()  # Use method to handle image URL
     
     class Meta:
         model = FoodItem
         fields = ['id', 'name', 'description', 'price', 'image', 'created_at']
+    
+    def get_image(self, obj):
+        """
+        Return image URL if image exists, otherwise return None.
+        """
+        if obj.image:
+            # Return relative path - will be converted to absolute in view
+            return obj.image.url
+        return None
 
 
 class CartItemSerializer(serializers.ModelSerializer):
