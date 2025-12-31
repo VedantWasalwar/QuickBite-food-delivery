@@ -11,12 +11,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-change-this-in-production-123456789'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production-123456789')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# Get Render URL from environment variable
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+# ALLOWED_HOSTS - Add Render URL and localhost
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS = [RENDER_EXTERNAL_HOSTNAME, 'localhost', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*.onrender.com']
 
 
 # Application definition
@@ -31,11 +38,13 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',  # Token authentication
     'corsheaders',  # To allow frontend to connect
     'api',  # Our API app
+    'whitenoise.runserver_nostatic',  # For static files on Render
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # CORS middleware (must be first)
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -103,6 +112,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# WhiteNoise configuration for static files on Render
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Media files (user uploaded images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -122,15 +134,28 @@ REST_FRAMEWORK = {
 }
 
 # CORS settings - Allow frontend to connect
-# In development, allow all origins for external access
-# In production, specify exact origins for security
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins in development (for external access)
-else:
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:5173",  # Vite default port
-        "http://127.0.0.1:5173",
-    ]
-
+# For production, allow all origins (you can restrict this later for security)
+CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for now
 CORS_ALLOW_CREDENTIALS = True
 
+# Additional CORS settings for production
+CORS_ALLOWED_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
