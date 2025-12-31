@@ -1,75 +1,78 @@
 /**
  * API Service - Handles all API calls to the backend
- * This file centralizes all API requests using Axios
+ * Works for both Local & Render Production
  */
-import axios from 'axios'
 
-// Base URL for API - dynamically uses current hostname for external access
-// If accessing from external device, use the same IP but port 8000
-const getApiUrl = () => {
-  const hostname = window.location.hostname
-  // Use current hostname (works for localhost and network IP)
-  return `http://${hostname}:8000/api`
-}
+import axios from "axios";
 
-const API_URL = getApiUrl()
+// ✅ API BASE URL
+const API_URL =
+  import.meta.env.MODE === "development"
+    ? "http://127.0.0.1:8000/api"
+    : "https://quickbite-food-delivery-1.onrender.com/api";
 
-// User API functions
+// Axios instance
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// ---------------- AUTH ----------------
 export const registerUser = async (username, email, password) => {
-  const response = await axios.post(`${API_URL}/register/`, {
+  const res = await api.post("/register/", {
     username,
     email,
     password,
-  })
-  return response.data
-}
+  });
+  return res.data;
+};
 
 export const loginUser = async (username, password) => {
-  const response = await axios.post(`${API_URL}/login/`, {
+  const res = await api.post("/login/", {
     username,
     password,
-  })
-  return response.data
-}
+  });
+  return res.data;
+};
 
-// Food API functions
+// ---------------- FOODS ----------------
 export const getFoods = async () => {
-  const response = await axios.get(`${API_URL}/foods/`)
-  return response.data
-}
+  const res = await api.get("/foods/");
+  return res.data;
+};
 
-// Note: We use getFoods() and filter by id since we only have a list endpoint
-// For a production app, you'd want a dedicated /api/foods/{id}/ endpoint
-
-// Cart API functions
+// ---------------- CART ----------------
 export const getCart = async () => {
-  const response = await axios.get(`${API_URL}/cart/`)
-  return response.data
-}
+  const res = await api.get("/cart/");
+  return res.data;
+};
 
 export const addToCart = async (foodId, quantity = 1) => {
-  const response = await axios.post(`${API_URL}/cart/add/`, {
+  const res = await api.post("/cart/add/", {
     food_id: foodId,
     quantity,
-  })
-  return response.data
-}
+  });
+  return res.data;
+};
 
 export const updateCartItem = async (itemId, quantity) => {
-  const response = await axios.put(`${API_URL}/cart/update/${itemId}/`, {
+  const res = await api.put(`/cart/update/${itemId}/`, {
     quantity,
-  })
-  return response.data
-}
+  });
+  return res.data;
+};
 
 export const removeFromCart = async (itemId) => {
-  const response = await axios.delete(`${API_URL}/cart/update/${itemId}/`)
-  return response.data
-}
+  const res = await api.delete(`/cart/update/${itemId}/`);
+  return res.data;
+};
 
-// Order API functions
+// ---------------- ORDER ----------------
 export const createOrder = async () => {
-  const response = await axios.post(`${API_URL}/order/create/`)
-  return response.data
-}
+  const res = await api.post("/order/create/");
+  return res.data;
+};
 
+export default api;
