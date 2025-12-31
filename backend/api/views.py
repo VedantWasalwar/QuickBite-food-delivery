@@ -149,16 +149,27 @@ def cart_view(request):
     GET /api/cart/
     Requires authentication (user must be logged in).
     """
-    cart_items = CartItem.objects.filter(user=request.user)
-    serializer = CartItemSerializer(cart_items, many=True)
-    
-    # Calculate total price
-    total = sum(item.food.price * item.quantity for item in cart_items)
-    
-    return Response({
-        'items': serializer.data,
-        'total': float(total)
-    })
+    try:
+        cart_items = CartItem.objects.filter(user=request.user)
+        serializer = CartItemSerializer(cart_items, many=True)
+        
+        # Calculate total price
+        total = sum(item.food.price * item.quantity for item in cart_items)
+        
+        return Response({
+            'items': serializer.data,
+            'total': float(total)
+        })
+    except Exception as e:
+        import traceback
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error in cart_view: {str(e)}")
+        logger.error(traceback.format_exc())
+        return Response(
+            {'error': 'Failed to retrieve cart', 'detail': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 @api_view(['POST'])
@@ -242,40 +253,51 @@ def create_order(request):
     POST /api/order/create/
     This will create an order with all items in the user's cart and clear the cart.
     """
-    cart_items = CartItem.objects.filter(user=request.user)
-    
-    if not cart_items.exists():
+    try:
+        cart_items = CartItem.objects.filter(user=request.user)
+        
+        if not cart_items.exists():
+            return Response(
+                {'error': 'Cart is empty'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Calculate total price
+        total_price = sum(item.food.price * item.quantity for item in cart_items)
+        
+        # Create order
+        order = Order.objects.create(
+            user=request.user,
+            total_price=total_price
+        )
+        
+        # Create order items from cart items
+        order_items = []
+        for cart_item in cart_items:
+            order_item = OrderItem.objects.create(
+                order=order,
+                food=cart_item.food,
+                quantity=cart_item.quantity,
+                price=cart_item.food.price
+            )
+            order_items.append(order_item)
+        
+        # Clear cart after creating order
+        cart_items.delete()
+        
+        # Return order details
+        serializer = OrderSerializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        import traceback
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error in create_order: {str(e)}")
+        logger.error(traceback.format_exc())
         return Response(
-            {'error': 'Cart is empty'},
-            status=status.HTTP_400_BAD_REQUEST
+            {'error': 'Failed to create order', 'detail': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
-    
-    # Calculate total price
-    total_price = sum(item.food.price * item.quantity for item in cart_items)
-    
-    # Create order
-    order = Order.objects.create(
-        user=request.user,
-        total_price=total_price
-    )
-    
-    # Create order items from cart items
-    order_items = []
-    for cart_item in cart_items:
-        order_item = OrderItem.objects.create(
-            order=order,
-            food=cart_item.food,
-            quantity=cart_item.quantity,
-            price=cart_item.food.price
-        )
-        order_items.append(order_item)
-    
-    # Clear cart after creating order
-    cart_items.delete()
-    
-    # Return order details
-    serializer = OrderSerializer(order)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
