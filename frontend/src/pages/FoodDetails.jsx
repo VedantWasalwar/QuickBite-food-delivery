@@ -5,7 +5,7 @@
  */
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getFoods, addToCart } from '../api/api'
+import { getFoods, addToCart, getImageUrl } from '../api/api'
 import { useAuth } from '../context/AuthContext'
 
 function FoodDetails() {
@@ -95,14 +95,8 @@ function FoodDetails() {
     )
   }
 
-  // Use current hostname for external access compatibility
-  const getImageUrl = (imagePath) => {
-    if (!imagePath) return 'https://via.placeholder.com/600x400?text=No+Image'
-    const hostname = window.location.hostname
-    return `http://${hostname}:8000${imagePath}`
-  }
-  
-  const imageUrl = getImageUrl(food.image)
+  // Get image URL using API helper
+  const imageUrl = getImageUrl(food.image) || 'https://via.placeholder.com/600x400?text=No+Image'
 
   return (
     <div className="container mx-auto px-4 py-8">

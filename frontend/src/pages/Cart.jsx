@@ -5,7 +5,7 @@
  */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCart, updateCartItem, removeFromCart, createOrder } from '../api/api'
+import { getCart, updateCartItem, removeFromCart, createOrder, getImageUrl } from '../api/api'
 import { useAuth } from '../context/AuthContext'
 
 function Cart() {
@@ -119,14 +119,8 @@ function Cart() {
           {/* Cart Items */}
           <div className="bg-white rounded-lg shadow-md mb-6">
             {cart.items.map((item) => {
-              // Use current hostname for external access compatibility
-              const getImageUrl = (imagePath) => {
-                if (!imagePath) return 'https://via.placeholder.com/150x150?text=No+Image'
-                const hostname = window.location.hostname
-                return `http://${hostname}:8000${imagePath}`
-              }
-              
-              const imageUrl = getImageUrl(item.food.image)
+              // Get image URL using API helper
+              const imageUrl = getImageUrl(item.food.image) || 'https://via.placeholder.com/150x150?text=No+Image'
               
               return (
                 <div

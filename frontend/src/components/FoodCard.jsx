@@ -5,14 +5,14 @@
  */
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { getImageUrl } from '../api/api'
 
 function FoodCard({ food }) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
 
   // Handle case where image might not be available
-  // Use current hostname for external access compatibility
-  const getImageUrl = (imagePath) => {
+  const getFoodImageUrl = (imagePath) => {
     if (!imagePath || imageError) {
       // Use food-specific placeholder images from Unsplash
       const foodImages = {
@@ -37,11 +37,11 @@ function FoodCard({ food }) {
       if (name.includes('brownie')) return foodImages.brownie
       return foodImages.default
     }
-    const hostname = window.location.hostname
-    return `http://${hostname}:8000${imagePath}`
+    // Use the API helper function to get proper image URL
+    return getImageUrl(imagePath) || foodImages.default
   }
   
-  const imageUrl = getImageUrl(food.image)
+  const imageUrl = getFoodImageUrl(food.image)
 
   const handleImageLoad = () => {
     setImageLoaded(true)
