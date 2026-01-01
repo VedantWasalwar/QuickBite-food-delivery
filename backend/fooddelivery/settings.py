@@ -21,12 +21,12 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 # -------------------------------------------------------------------
-# ALLOWED HOSTS  ✅ (IMPORTANT)
+# ALLOWED HOSTS
 # -------------------------------------------------------------------
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    ".onrender.com",   # allow all Render services
+    ".onrender.com",
 ]
 
 # -------------------------------------------------------------------
@@ -40,15 +40,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Third-party
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
 
-    # Local
     "api",
 
-    # Static
     "whitenoise.runserver_nostatic",
 ]
 
@@ -144,7 +141,7 @@ REST_FRAMEWORK = {
 }
 
 # -------------------------------------------------------------------
-# CORS  ✅ (NETLIFY + LOCAL)
+# CORS (NETLIFY + LOCAL)
 # -------------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -153,12 +150,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-# ❌ NEVER use this with credentials
 CORS_ALLOW_ALL_ORIGINS = False
 
 # -------------------------------------------------------------------
-# CSRF  ✅ (LOGIN FIX)
+# CSRF (ADMIN LOGIN FIX)
 # -------------------------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
     "https://quickbite-food-delivery.netlify.app",
@@ -166,16 +161,22 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # -------------------------------------------------------------------
-# RENDER HTTPS FIX
+# 🔐 COOKIE FIX (MOST IMPORTANT PART)
 # -------------------------------------------------------------------
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-SECURE_SSL_REDIRECT = False  # Render already handles HTTPS
-
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
+
 # -------------------------------------------------------------------
-# LOGGING (optional but helpful)
+# RENDER HTTPS FIX
+# -------------------------------------------------------------------
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = False
+
+# -------------------------------------------------------------------
+# LOGGING
 # -------------------------------------------------------------------
 LOGGING = {
     "version": 1,
