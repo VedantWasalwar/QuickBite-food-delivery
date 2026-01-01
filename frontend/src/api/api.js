@@ -19,8 +19,8 @@ const getApiUrl = () => {
   }
   
   // 3. Production mode - use Render backend
-  // Backend is deployed at: https://quickbite-food-backend-wzem.onrender.com/api
-  return "https://quickbite-food-backend-wzem.onrender.com/api";
+  // Backend is deployed at: https://quickbite-food-backend-wzem.onrender.com/api/
+  return "https://quickbite-food-backend-wzem.onrender.com/api/";
 };
 
 const API_URL = getApiUrl();
@@ -47,11 +47,11 @@ export const getImageUrl = (imagePath) => {
   return `${getBackendBaseUrl()}${imagePath}`;
 };
 
-// Log API URL in development for debugging
-if (import.meta.env.MODE === "development") {
-  console.log("🔗 API Base URL:", API_URL);
-  console.log("🔗 Backend Base URL:", getBackendBaseUrl());
-}
+// Log API URL for debugging (both development and production)
+console.log("🔗 API Base URL:", API_URL);
+console.log("🔗 Backend Base URL:", getBackendBaseUrl());
+console.log("🔗 Environment Mode:", import.meta.env.MODE);
+console.log("🔗 VITE_BACKEND_URL:", import.meta.env.VITE_BACKEND_URL || "Not set");
 
 // Axios instance with error handling
 const api = axios.create({
@@ -115,8 +115,22 @@ export const loginUser = async (username, password) => {
 
 // ---------------- FOODS ----------------
 export const getFoods = async () => {
-  const res = await api.get("/foods/");
-  return res.data;
+  try {
+    console.log("📡 Fetching foods from:", `${API_URL}/foods/`);
+    const res = await api.get("/foods/");
+    console.log("✅ Foods fetched successfully:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("❌ getFoods Error:", {
+      message: error.message,
+      url: `${API_URL}/foods/`,
+      status: error.response?.status,
+      data: error.response?.data,
+      code: error.code,
+      fullError: error
+    });
+    throw error;
+  }
 };
 
 // ---------------- CART ----------------

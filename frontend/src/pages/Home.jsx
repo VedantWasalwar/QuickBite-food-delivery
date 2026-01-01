@@ -49,8 +49,14 @@ function Home() {
       setFoods(data)
       setError(null)
     } catch (err) {
-      setError('Failed to load food items. Please check if backend server is running.')
+      // Get the actual API URL for better error message
+      const apiUrl = import.meta.env.VITE_BACKEND_URL || 
+        (import.meta.env.MODE === "development" ? "http://127.0.0.1:8000/api" : "https://quickbite-food-backend-wzem.onrender.com/api/")
+      
+      setError(`Failed to load food items. Backend URL: ${apiUrl}`)
       console.error('Error fetching foods:', err)
+      console.error('API URL being used:', apiUrl)
+      console.error('Full error details:', err.response || err.message)
       // Set empty array so page still shows
       setFoods([])
     } finally {
@@ -181,7 +187,10 @@ function Home() {
               <div>
                 <p className="font-semibold">Connection Error</p>
                 <p className="text-sm">{error}</p>
-                <p className="text-sm mt-2">Please start the backend server: <code className="bg-yellow-100 px-2 py-1 rounded">python manage.py runserver</code></p>
+                <p className="text-sm mt-2">
+                  Backend URL: <code className="bg-yellow-100 px-2 py-1 rounded text-xs break-all">{import.meta.env.VITE_BACKEND_URL || (import.meta.env.MODE === "development" ? "http://127.0.0.1:8000/api" : "https://quickbite-food-backend-wzem.onrender.com/api/")}</code>
+                </p>
+                <p className="text-sm mt-2">Check browser console (F12) for detailed error information.</p>
               </div>
             </div>
           </div>
