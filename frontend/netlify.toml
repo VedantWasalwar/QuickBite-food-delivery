@@ -12,11 +12,13 @@
     NODE_VERSION = "18"
 
 # Redirect rules for React Router (SPA)
-# All routes should redirect to index.html
+# All routes should redirect to index.html for client-side routing
+# This ensures /login, /register, etc. work properly
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 # Headers for security and CORS
 [[headers]]

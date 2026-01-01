@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,5 +15,15 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Ensure public files are copied to dist
+    copyPublicDir: true,
+    // Build output directory
+    outDir: 'dist',
+    // Ensure proper base path for production
+    base: '/',
+  },
+  // Public directory for static assets
+  publicDir: 'public',
 })
 
