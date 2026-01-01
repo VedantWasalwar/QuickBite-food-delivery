@@ -21,11 +21,12 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 # -------------------------------------------------------------------
-# ALLOWED HOSTS
+# ALLOWED HOSTS ✅ (RENDER FIX)
 # -------------------------------------------------------------------
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "quickbite-food-backend-wzem.onrender.com",
     ".onrender.com",
 ]
 
@@ -40,12 +41,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    # Third-party
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
 
+    # Local
     "api",
 
+    # Static
     "whitenoise.runserver_nostatic",
 ]
 
@@ -141,7 +145,7 @@ REST_FRAMEWORK = {
 }
 
 # -------------------------------------------------------------------
-# CORS (NETLIFY + LOCAL)
+# CORS ✅ (NETLIFY + LOCAL)
 # -------------------------------------------------------------------
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -153,15 +157,15 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
 
 # -------------------------------------------------------------------
-# CSRF (ADMIN LOGIN FIX)
+# CSRF ✅ (ADMIN LOGIN FIX)
 # -------------------------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
+    "https://quickbite-food-backend-wzem.onrender.com",
     "https://quickbite-food-delivery.netlify.app",
-    "https://*.onrender.com",
 ]
 
 # -------------------------------------------------------------------
-# 🔐 COOKIE FIX (MOST IMPORTANT PART)
+# 🔐 COOKIE FIX (MOST IMPORTANT)
 # -------------------------------------------------------------------
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
