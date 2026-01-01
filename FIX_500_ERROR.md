@@ -210,3 +210,6 @@ DEBUG=True
 
 **Note**: Render free tier पर services sleep हो जाती हैं। पहली request slow हो सकती है (30-60 seconds)।
 
+
+
+

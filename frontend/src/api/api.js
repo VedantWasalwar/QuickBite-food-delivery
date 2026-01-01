@@ -19,8 +19,8 @@ const getApiUrl = () => {
   }
   
   // 3. Production mode - use Render backend
-  // Backend is deployed at: https://quickbite-food-delivery-1.onrender.com/api
-  return "https://quickbite-food-delivery-1.onrender.com/api";
+  // Backend is deployed at: https://quickbite-food-backend-wzem.onrender.com/api
+  return "https://quickbite-food-backend-wzem.onrender.com/api";
 };
 
 const API_URL = getApiUrl();
@@ -33,7 +33,7 @@ export const getBackendBaseUrl = () => {
   if (import.meta.env.MODE === "development" || import.meta.env.DEV) {
     return "http://127.0.0.1:8000";
   }
-  return "https://quickbite-food-delivery-1.onrender.com";
+  return "https://quickbite-food-backend-wzem.onrender.com";
 };
 
 // Helper function to get full image URL

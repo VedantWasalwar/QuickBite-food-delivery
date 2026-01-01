@@ -137,3 +137,6 @@ python manage.py runserver 0.0.0.0:8000
 
 **Note**: Render free tier पर services sleep हो जाती हैं। पहली request slow हो सकती है (cold start)।
 
+
+
+

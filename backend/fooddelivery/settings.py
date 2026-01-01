@@ -18,11 +18,27 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # ✅ ALLOWED HOSTS (Render + Local)
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "quickbite-food-delivery-1.onrender.com",
-]
+# Get from environment variable or use default list
+ALLOWED_HOSTS_STR = os.environ.get('ALLOWED_HOSTS', '')
+if ALLOWED_HOSTS_STR:
+    # Split comma-separated hosts from environment variable
+    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_STR.split(',')]
+else:
+    # Default hosts for local development
+    ALLOWED_HOSTS = [
+        "localhost",
+        "127.0.0.1",
+    ]
+
+# ✅ Automatically allow all Render.com subdomains (for production)
+# This allows any *.onrender.com domain to work
+if not DEBUG:
+    # In production, allow all Render subdomains
+    ALLOWED_HOSTS.append('.onrender.com')
+    # Also add the specific host if provided via environment
+    render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    if render_host:
+        ALLOWED_HOSTS.append(render_host)
 
 # Application definition
 INSTALLED_APPS = [
@@ -130,11 +146,19 @@ CORS_ALLOWED_ORIGINS = [
     "https://quickbite-food-delivery-1.onrender.com",
 ]
 
+# Get Netlify URL from environment variable (if deployed on Netlify)
+NETLIFY_URL = os.environ.get('NETLIFY_URL', '')
+if NETLIFY_URL:
+    CORS_ALLOWED_ORIGINS.append(NETLIFY_URL)
+
 # Also allow all origins in development (for local network access)
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     CORS_ALLOW_ALL_ORIGINS = False
+    # In production, also allow all Netlify subdomains if needed
+    # Uncomment the line below if you want to allow all Netlify sites
+    # CORS_ALLOWED_ORIGINS.append('https://*.netlify.app')
 
 CORS_ALLOW_CREDENTIALS = True
 

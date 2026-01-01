@@ -33,3 +33,6 @@ class ErrorHandlingMiddleware:
                 'path': request.path,
             }, status=500)
 
+
+
+

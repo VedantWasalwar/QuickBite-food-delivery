@@ -311,3 +311,6 @@ python manage.py runserver 0.0.0.0:8000
 
 **Most Important**: Build command में `python manage.py migrate --noinput` जरूर add करें! यह 90% cases में problem solve कर देगा।
 
+
+
+

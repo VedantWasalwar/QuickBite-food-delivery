@@ -1,0 +1,12 @@
+# Backend API URL Configuration
+# Copy this content to a .env file in the frontend directory
+
+# For Local Development (default)
+# VITE_BACKEND_URL=http://127.0.0.1:8000/api
+
+# For Render Production
+VITE_BACKEND_URL=https://quickbite-food-delivery-1.onrender.com/api
+
+# For Custom Backend URL
+# VITE_BACKEND_URL=https://your-backend-url.onrender.com/api
+
