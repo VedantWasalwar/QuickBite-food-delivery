@@ -155,10 +155,11 @@ if NETLIFY_URL:
 if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    CORS_ALLOW_ALL_ORIGINS = False
-    # In production, also allow all Netlify subdomains if needed
-    # Uncomment the line below if you want to allow all Netlify sites
-    # CORS_ALLOWED_ORIGINS.append('https://*.netlify.app')
+    # In production, allow all origins temporarily for debugging
+    # TODO: Restrict to specific domains after testing
+    CORS_ALLOW_ALL_ORIGINS = True
+    # Uncomment below to restrict to specific origins only
+    # CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
 

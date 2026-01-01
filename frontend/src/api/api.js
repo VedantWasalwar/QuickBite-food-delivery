@@ -82,14 +82,33 @@ api.interceptors.response.use(
   (error) => {
     if (error.code === "ECONNABORTED") {
       console.error("⏱️ Request timeout - Backend might be slow or unavailable");
+      console.error("⏱️ Backend URL:", API_URL);
     } else if (error.response) {
       // Server responded with error status
-      console.error("❌ API Error:", error.response.status, error.response.data);
+      console.error("❌ API Error Response:", {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data,
+        headers: error.response.headers,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL
+      });
     } else if (error.request) {
       // Request made but no response received
-      console.error("🔌 No response from backend. Check if backend is running at:", API_URL);
+      console.error("🔌 No response from backend:", {
+        url: API_URL,
+        request: error.request,
+        message: error.message,
+        code: error.code
+      });
+      console.error("🔌 Possible issues:");
+      console.error("   - Backend service not running");
+      console.error("   - CORS issue");
+      console.error("   - Network connectivity problem");
+      console.error("   - Backend URL incorrect");
     } else {
       console.error("❌ Request error:", error.message);
+      console.error("❌ Full error:", error);
     }
     return Promise.reject(error);
   }
