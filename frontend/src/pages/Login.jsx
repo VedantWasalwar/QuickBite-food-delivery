@@ -34,21 +34,48 @@ function Login() {
     setLoading(true)
 
     try {
+      console.log('🔐 Attempting login for user:', formData.username)
       const response = await loginUser(formData.username, formData.password)
+      console.log('✅ Login successful:', response)
+      
       // Save token and user info using auth context
-      login(response.token, response.username, response.user_id)
-      navigate('/')  // Redirect to home page
+      if (response.token && response.username) {
+        login(response.token, response.username, response.user_id)
+        navigate('/')  // Redirect to home page
+      } else {
+        setError('Invalid response from server. Please try again.')
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please check your credentials.')
-      console.error('Login error:', err)
+      console.error('❌ Login error:', err)
+      console.error('❌ Error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+        url: err.config?.url
+      })
+      
+      // Better error messages
+      if (err.response) {
+        // Server responded with error
+        const errorMsg = err.response.data?.error || 
+                        err.response.data?.detail || 
+                        `Login failed (${err.response.status}). Please check your credentials.`
+        setError(errorMsg)
+      } else if (err.request) {
+        // Request made but no response
+        setError('Cannot connect to backend server. Please check if backend is running.')
+      } else {
+        // Other error
+        setError(err.message || 'Login failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+    <div className="container mx-auto px-4 py-12 min-h-screen flex items-center justify-center">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h1>
 
         {/* Error Message */}
