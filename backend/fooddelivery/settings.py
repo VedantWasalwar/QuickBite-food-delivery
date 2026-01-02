@@ -193,4 +193,4 @@ LOGGING = {
         "level": "INFO",
     },
 }
-import create_superuser
+
