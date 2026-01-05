@@ -21,7 +21,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 # -------------------------------------------------------------------
-# ALLOWED HOSTS ✅ (RENDER FIX)
+# ALLOWED HOSTS (RENDER)
 # -------------------------------------------------------------------
 ALLOWED_HOSTS = [
     "localhost",
@@ -69,6 +69,8 @@ MIDDLEWARE = [
 ]
 
 # -------------------------------------------------------------------
+# URL / WSGI
+# -------------------------------------------------------------------
 ROOT_URLCONF = "fooddelivery.urls"
 WSGI_APPLICATION = "fooddelivery.wsgi.application"
 
@@ -92,7 +94,7 @@ TEMPLATES = [
 ]
 
 # -------------------------------------------------------------------
-# DATABASE
+# DATABASE (SQLite – Render compatible)
 # -------------------------------------------------------------------
 DATABASES = {
     "default": {
@@ -145,19 +147,19 @@ REST_FRAMEWORK = {
 }
 
 # -------------------------------------------------------------------
-# CORS ✅ (NETLIFY + LOCAL)
+# CORS (NETLIFY + LOCAL)
 # -------------------------------------------------------------------
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://quickbite-food-delivery.netlify.app",
 ]
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = False
-
 # -------------------------------------------------------------------
-# CSRF ✅ (ADMIN LOGIN FIX)
+# CSRF (ADMIN + FRONTEND FIX)
 # -------------------------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
     "https://quickbite-food-backend-wzem.onrender.com",
@@ -165,16 +167,16 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # -------------------------------------------------------------------
-# 🔐 COOKIE FIX (MOST IMPORTANT)
+# 🔐 COOKIE SETTINGS (STABLE & WORKING)
 # -------------------------------------------------------------------
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
-SESSION_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
 
 # -------------------------------------------------------------------
-# RENDER HTTPS FIX
+# RENDER HTTPS
 # -------------------------------------------------------------------
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = False
