@@ -18,7 +18,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-change-this-in-production"
 )
 
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = False  # ❗ Always False on Render
 
 # -------------------------------------------------------------------
 # ALLOWED HOSTS (RENDER)
@@ -159,7 +159,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # -------------------------------------------------------------------
-# CSRF (ADMIN + FRONTEND FIX)
+# CSRF (ADMIN + FRONTEND)
 # -------------------------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
     "https://quickbite-food-backend-wzem.onrender.com",
@@ -167,7 +167,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # -------------------------------------------------------------------
-# 🔐 COOKIE SETTINGS (STABLE & WORKING)
+# 🔐 COOKIE SETTINGS (ADMIN LOGIN FIX – VERY IMPORTANT)
 # -------------------------------------------------------------------
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
