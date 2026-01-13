@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { getImageUrl } from '../api/api'
 
+
 function FoodCard({ food }) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [imageError, setImageError] = useState(false)
