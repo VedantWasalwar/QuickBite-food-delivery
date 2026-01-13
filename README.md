@@ -2,7 +2,7 @@
 
 | Home Page | Food Menu |
 |----------|-----------|
-| ![Home](screenshots/frontend-home.png) | ![Menu](screenshots/frontend-menu.png) |
+| ![Home](screenshots/home.png) | ![Menu](screenshots/menu.png) |
 
 # 🍔 QuickBite – Online Food Ordering System
 
