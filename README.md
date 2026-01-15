@@ -14,7 +14,7 @@ The project demonstrates real-world concepts such as REST APIs, frontend–backe
 ## 🌐 Live Project Links
 
 🔗 **Backend (Render):**  
-https://quickbite-food-backend-wzem.onrender.com  
+https://quickbite-food-backend-wzem.onrender.com/admin/
 
 🔗 **Food API Endpoint:**  
 https://quickbite-food-backend-wzem.onrender.com/api/foods/
