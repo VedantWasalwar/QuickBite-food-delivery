@@ -50,14 +50,15 @@ https://quickbite-food-delivery.netlify.app/
 ## 🛠️ Technology Stack
 
 ### Frontend
-- React (Vite)
-- Tailwind CSS
-- Axios
-- JavaScript (ES6)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript_ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
 ### Backend
-- Django
-- Django REST Framework
-- PostgreSQL (Render)
-- Django CORS Headers
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![DjangoREST](https://img.shields.io/badge/Django_REST_Framework-ff1709?style=for-the-badge&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL_Render-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![CORS](https://img.shields.io/badge/Django_CORS_Headers-0A66C2?style=for-the-badge&logo=django&logoColor=white)
 
